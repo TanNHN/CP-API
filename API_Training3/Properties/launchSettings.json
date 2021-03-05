@@ -8,6 +8,12 @@
       "sslPort": 44339
     }
   },
+  "env": {
+    "ASPNETCORE_ENVIRONMENT": "Development",
+    "ASPNETCORE_URLS": "http://localhost:5001",
+    "CLIENT_ID": "aaaaa123aaaaaaa123aaaa123aaaa",
+    "CLIENT_SECRET": "bbb123bbbbbbbb123bbb098"
+  },
   "profiles": {
     "IIS Express": {
       "commandName": "IISExpress",
