@@ -59,6 +59,7 @@ namespace API_Training3
           {
               x.RequireHttpsMetadata = false;
               x.SaveToken = true;
+
               x.TokenValidationParameters = new TokenValidationParameters
               {
                   ValidateIssuerSigningKey = true,
@@ -67,6 +68,13 @@ namespace API_Training3
                   ValidateAudience = false
               };
           });
+
+            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
