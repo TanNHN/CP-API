@@ -43,7 +43,7 @@ namespace API_Training3.Modules.Accounts.Services
         Task<List<string>> ConvertDICOMtoPng2(List<IFormFile> files);
         Task<List<string>> ConvertDICOMtoPng3(List<IFormFile> files);
         Task<List<string>> ConvertDICOMtoPng4(List<IFormFile> files);
-
+        Task<List<string>> ConvertDICOMtoPng5(List<IFormFile> files);
 
     }
 
@@ -283,31 +283,31 @@ namespace API_Training3.Modules.Accounts.Services
         public async Task<List<string>> ConvertDICOMtoPng(List<IFormFile> files)
         {
             List<string> filePaths = new List<string>();
-              string fileName;
-             foreach (var file in files)
-             {
-                 if (file.Length > 0)
-                 {
-                     using (var ms = new MemoryStream())
-                     {
-                         await file.CopyToAsync(ms);
+            string fileName;
+            foreach (var file in files)
+            {
+                if (file.Length > 0)
+                {
+                    using (var ms = new MemoryStream())
+                    {
+                        await file.CopyToAsync(ms);
 
 
-                         using (Aspose.Imaging.FileFormats.Dicom.DicomImage image = new Aspose.Imaging.FileFormats.Dicom.DicomImage(ms))
-                         {
+                        using (Aspose.Imaging.FileFormats.Dicom.DicomImage image = new Aspose.Imaging.FileFormats.Dicom.DicomImage(ms))
+                        {
                             // Set the active page to be converted to JPEG
                             ms.Position = 0;
-                             int activePage = image.ActivePageIndex;
-                             image.ActivePage = (Aspose.Imaging.FileFormats.Dicom.DicomPage)image.Pages[0];
-                             // Save as PNG
-                             fileName = Path.ChangeExtension(file.FileName, ".png");
-                             image.Save(savePathAspose + fileName, new PngOptions());
-                             filePaths.Add(savePathAspose + fileName);
-                         }
-                     }
-                 }
-             }
-             return filePaths;
+                            int activePage = image.ActivePageIndex;
+                            image.ActivePage = (Aspose.Imaging.FileFormats.Dicom.DicomPage)image.Pages[0];
+                            // Save as PNG
+                            fileName = Path.ChangeExtension(file.FileName, ".png");
+                            image.Save(savePathAspose + fileName, new PngOptions());
+                            filePaths.Add(savePathAspose + fileName);
+                        }
+                    }
+                }
+            }
+            return filePaths;
         }
 
         public async Task<List<string>> ConvertDICOMtoPng2(List<IFormFile> files)
@@ -323,10 +323,10 @@ namespace API_Training3.Modules.Accounts.Services
                         await file.CopyToAsync(ms);
 
                         DCMDocument doc = new DCMDocument(ms);
-                        
+
                         fileName = file.FileName.Replace(".dicom", "");
                         doc.ConvertToImages(RasterEdge.Imaging.Basic.ImageType.PNG, savePathRasterEdge, fileName);
-                             filePaths.Add(savePathRasterEdge + fileName);
+                        filePaths.Add(savePathRasterEdge + fileName);
 
                     }
                 }
@@ -372,7 +372,7 @@ namespace API_Training3.Modules.Accounts.Services
                                 var newFile = transcoder.Transcode(file);
                                 newFile.Save(savePathAspose + fileName);
                             }
-                            
+
                             filePaths.Add(savePathAspose + fileName);
                         }
                         // await the task to wait until upload completes and get the download url
@@ -392,7 +392,7 @@ namespace API_Training3.Modules.Accounts.Services
             {
                 if (formFile.Length > 0)
                 {
-                        fileName = Path.ChangeExtension(formFile.FileName, ".png");
+                    fileName = Path.ChangeExtension(formFile.FileName, ".png");
                     /* using (MemoryStream ms = new MemoryStream())
                      {
                          await formFile.CopyToAsync(ms);
@@ -407,16 +407,16 @@ namespace API_Training3.Modules.Accounts.Services
                     Stream dcmStream = formFile.OpenReadStream();
 
                     DicomFile file = DicomFile.Open(dcmStream);
-                        if (file.Dataset.InternalTransferSyntax.Equals(DicomTransferSyntax.ImplicitVRLittleEndian))
-                        {
-                            DCMDocument doc = new DCMDocument(formFile.OpenReadStream());
-                            doc.ConvertToImages(RasterEdge.Imaging.Basic.ImageType.PNG, savePathRasterEdge, fileName);
-                            filePaths.Add(savePathRasterEdge + formFile.FileName);
-                        }
-                        else
-                        {
-                            var transcoder = new DicomTranscoder(file.Dataset.InternalTransferSyntax, DicomTransferSyntax.ImplicitVRLittleEndian);
-                            var newFile = transcoder.Transcode(file);
+                    if (file.Dataset.InternalTransferSyntax.Equals(DicomTransferSyntax.ImplicitVRLittleEndian))
+                    {
+                        DCMDocument doc = new DCMDocument(formFile.OpenReadStream());
+                        doc.ConvertToImages(RasterEdge.Imaging.Basic.ImageType.PNG, savePathRasterEdge, fileName);
+                        filePaths.Add(savePathRasterEdge + formFile.FileName);
+                    }
+                    else
+                    {
+                        var transcoder = new DicomTranscoder(file.Dataset.InternalTransferSyntax, DicomTransferSyntax.ImplicitVRLittleEndian);
+                        var newFile = transcoder.Transcode(file);
                         using (MemoryStream ms = new MemoryStream())
                         {
                             newFile.Save(ms);
@@ -424,9 +424,74 @@ namespace API_Training3.Modules.Accounts.Services
                             doc.ConvertToImages(RasterEdge.Imaging.Basic.ImageType.PNG, savePathRasterEdge, fileName);
                             filePaths.Add(savePathRasterEdge + formFile.FileName);
                         }
+
+                    }
+                }
+            }
+            return filePaths;
+        }
+
+        public async Task<List<string>> ConvertDICOMtoPng5(List<IFormFile> files)
+        {
+            List<string> filePaths = new List<string>();
+            string fileName;
+            foreach (var formFile in files)
+            {
+                if (formFile.Length > 0)
+                {
+                    fileName = Path.ChangeExtension(formFile.FileName, ".png");
+                    /* using (MemoryStream ms = new MemoryStream())
+                     {
+                         await formFile.CopyToAsync(ms);
+                         DicomFile dcmf = DicomFile.Open(ms, FileReadOption.ReadAll);
+                     }
+
+                     using (FileStream stream = new FileStream(filePath, FileMode.Create))
+                     {
+                         await formFile.CopyToAsync(stream);
+                         stream.Close();
+                     }*/
+                    Stream dcmStream = formFile.OpenReadStream();
+
+                    DicomFile file = DicomFile.Open(dcmStream);
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        if (file.Dataset.InternalTransferSyntax.Equals(DicomTransferSyntax.ImplicitVRLittleEndian))
+                        {
                             
+                                await formFile.CopyToAsync(ms);
+                                Aspose.Imaging.FileFormats.Dicom.DicomImage image = new Aspose.Imaging.FileFormats.Dicom.DicomImage(ms);
+                                image.ActivePage = (Aspose.Imaging.FileFormats.Dicom.DicomPage)image.Pages[0];
+                            // temp file exists
+                            
+                            // Save as PNG
+                            image.Save(ms, new PngOptions());
+                            string fileTest = Path.GetTempFileName();
+                            FileStream fs = new FileStream(fileTest, FileMode.Create);
+                            await ms.CopyToAsync(fs);
+                                filePaths.Add(fileName);                            
+                        }
+                        else
+                        {
+                                var transcoder = new DicomTranscoder(file.Dataset.InternalTransferSyntax, DicomTransferSyntax.ImplicitVRLittleEndian);
+                                var newFile = transcoder.Transcode(file);
+
+                                newFile.Save(ms);
+                            await formFile.CopyToAsync(ms);
+                            Aspose.Imaging.FileFormats.Dicom.DicomImage image = new Aspose.Imaging.FileFormats.Dicom.DicomImage(ms);
+                            image.ActivePage = (Aspose.Imaging.FileFormats.Dicom.DicomPage)image.Pages[0];
+                            // temp file exists
+
+                            // Save as PNG
+                            image.Save(ms, new PngOptions());
+                            string fileTest = Path.GetTempFileName();
+                            FileStream fs = new FileStream(fileTest, FileMode.Create);
+                            await ms.CopyToAsync(fs);
+                            filePaths.Add(fileName);
+
                         }
                     }
+                }
             }
             return filePaths;
         }

@@ -105,36 +105,44 @@ namespace API_Training3.Modules.Accounts.Controllers
 
         /*[RequestSizeLimit(10L * 1024L * 1024L * 1024L)]
         [RequestFormLimits(MultipartBodyLengthLimit = 10L * 1024L * 1024L * 1024L)]*/
+        /* [HttpPost("ConvertToPng")]
+
+         public async Task<List<string>> ConvertToPng([FromForm] List<IFormFile> files)
+         {
+             List<string> result = await _accountService.ConvertDICOMtoPng(files);
+             return result;
+         }
+
+         [HttpPost("ConvertToPng2")]
+
+         public async Task<List<string>> ConvertToPng2([FromForm] List<IFormFile> files)
+         {
+             List<string> result = await _accountService.ConvertDICOMtoPng2(files);
+             return result;
+         }
+
+         [HttpPost("ConvertToPng3")]
+
+         public async Task<List<string>> ConvertToPng3([FromForm] List<IFormFile> files)
+         {
+             List<string> result = await _accountService.ConvertDICOMtoPng3(files);
+             return result;
+         }
+
+         [DisableRequestSizeLimit]
+         [HttpPost("ConvertToPng4")]
+
+         public async Task<List<string>> ConvertToPng4([FromForm] List<IFormFile> files)
+         {
+             List<string> result = await _accountService.ConvertDICOMtoPng4(files);
+             return result;
+         }*/
+
         [HttpPost("ConvertToPng")]
-
-        public async Task<List<string>> ConvertToPng([FromForm] List<IFormFile> files)
-        {
-            List<string> result = await _accountService.ConvertDICOMtoPng(files);
-            return result;
-        }
-
-        [HttpPost("ConvertToPng2")]
 
         public async Task<List<string>> ConvertToPng2([FromForm] List<IFormFile> files)
         {
-            List<string> result = await _accountService.ConvertDICOMtoPng2(files);
-            return result;
-        }
-
-        [HttpPost("ConvertToPng3")]
-
-        public async Task<List<string>> ConvertToPng3([FromForm] List<IFormFile> files)
-        {
-            List<string> result = await _accountService.ConvertDICOMtoPng3(files);
-            return result;
-        }
-
-        [DisableRequestSizeLimit]
-        [HttpPost("ConvertToPng4")]
-
-        public async Task<List<string>> ConvertToPng4([FromForm] List<IFormFile> files)
-        {
-            List<string> result = await _accountService.ConvertDICOMtoPng4(files);
+            List<string> result = await _accountService.ConvertDICOMtoPng5(files);
             return result;
         }
     }
