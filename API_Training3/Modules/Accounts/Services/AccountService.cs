@@ -25,6 +25,9 @@ using System.Threading.Tasks;
 using Dicom;
 using Dicom.Imaging;
 using Dicom.Imaging.Codec;
+using System.Net.Http;
+using System.Collections;
+using System.Text.Json;
 
 namespace API_Training3.Modules.Accounts.Services
 {
@@ -44,6 +47,8 @@ namespace API_Training3.Modules.Accounts.Services
         Task<List<string>> ConvertDICOMtoPng3(List<IFormFile> files);
         Task<List<string>> ConvertDICOMtoPng4(List<IFormFile> files);
         Task<List<string>> ConvertDICOMtoPng5(List<IFormFile> files);
+        Task<List<string>> DetectPng(List<IFormFile> files);
+
 
     }
 
@@ -56,13 +61,13 @@ namespace API_Training3.Modules.Accounts.Services
         private readonly IMapper Mapper;
         private readonly IConfiguration _configuration;
         private readonly FirebaseAuthProvider firebaseAuthProvider;
+        private IHttpClientFactory factory;
         public AccountService(IConfiguration configuration, IMapper mapper, IMongoDBWrapper mongoDb)
         {
             _configuration = configuration;
             Mapper = mapper;
             _mongoDb = mongoDb;
             firebaseAuthProvider = new FirebaseAuthProvider(new FirebaseConfig(_configuration["Firebase:APIKey"]));
-
         }
 
         public async Task<List<string>> UploadFile(List<IFormFile> files)
@@ -435,6 +440,13 @@ namespace API_Training3.Modules.Accounts.Services
         {
             List<string> filePaths = new List<string>();
             string fileName;
+            if (files.Count == 0)
+            {
+                filePaths.Add("No file");
+            }
+            else
+            {
+
             foreach (var formFile in files)
             {
                 if (formFile.Length > 0)
@@ -466,10 +478,12 @@ namespace API_Training3.Modules.Accounts.Services
                             
                             // Save as PNG
                             image.Save(ms, new PngOptions());
-                            string fileTest = Path.GetTempFileName();
-                            FileStream fs = new FileStream(fileTest, FileMode.Create);
-                            await ms.CopyToAsync(fs);
-                                filePaths.Add(fileName);                            
+                            HttpClient client = factory.CreateClient();
+
+                            client.BaseAddress = new Uri("https://localhost:44393");
+                            var response = client.GetAsync("/api/values").Result;
+
+                            filePaths.Add(fileName);                            
                         }
                         else
                         {
@@ -484,16 +498,54 @@ namespace API_Training3.Modules.Accounts.Services
 
                             // Save as PNG
                             image.Save(ms, new PngOptions());
-                            string fileTest = Path.GetTempFileName();
-                            FileStream fs = new FileStream(fileTest, FileMode.Create);
-                            await ms.CopyToAsync(fs);
                             filePaths.Add(fileName);
 
                         }
                     }
                 }
             }
+            }
+
             return filePaths;
+        }
+
+        public async Task<List<string>> DetectPng(List<IFormFile> files)
+        {
+            List<string> data = new List<string>();
+            foreach (var formFile in files)
+            {
+                if (Path.GetExtension(formFile.FileName).Equals(".dicom"))
+                {
+                    var httpClient = new HttpClient();
+                    MultipartFormDataContent form = new MultipartFormDataContent();
+                    var stream = formFile.OpenReadStream();
+                    HttpContent content;
+                    MemoryStream ms = new MemoryStream();
+                    await formFile.CopyToAsync(ms);
+                    content = new ByteArrayContent(ms.ToArray());
+                    form.Add(content, "files", formFile.Name);
+                    /*var response = await httpClient.PostAsync("https://forge-cp-app.herokuapp.com/swagger/index.html?fbclid=IwAR2MN_ACiDwnuZymPzL9uS_2SLVKaPzFumTweVMqygEBIHOYQQB0ZPklCJQ/api/Account/ConvertToPng", content);*/
+                    try
+                    {
+                        using (var httpResponseMessage = await httpClient.PostAsync("https://forge-cp-app.herokuapp.com/api/Account/ConvertToPng", content))
+                        {
+                            string jsonData = httpResponseMessage.Content.ReadAsStringAsync().Result;
+                            data = JsonSerializer.Deserialize<List<string>>(jsonData);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+
+                        Console.WriteLine(e.Message);
+                    }
+                    
+/*                    string jsonData = response.Content.ReadAsStringAsync().Result;
+                        data = JsonSerializer.Deserialize<List<string>>(jsonData);*/
+                    
+                }
+            }
+
+                    return data;
         }
     }
 }

@@ -36,6 +36,7 @@
           "MongoDB.Driver": "2.11.6",
           "Swashbuckle.AspNetCore": "5.6.3",
           "System.Data.SqlClient": "4.8.2",
+          "System.IO": "4.3.0",
           "System.IdentityModel.Tokens.Jwt": "6.8.0",
           "System.Linq.Dynamic.Core": "1.2.7",
           "fo-dicom.NetCore": "4.0.7",

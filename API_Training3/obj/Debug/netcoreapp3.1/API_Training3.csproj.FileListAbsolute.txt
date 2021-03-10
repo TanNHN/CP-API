@@ -103,10 +103,10 @@ C:\Users\Tan\source\repos\API_Training3\API_Training3\bin\Debug\netcoreapp3.1\gd
 C:\Users\Tan\source\repos\API_Training3\API_Training3\bin\Debug\netcoreapp3.1\gdcmsharpglue.dll
 C:\Users\Tan\source\repos\API_Training3\API_Training3\bin\Debug\netcoreapp3.1\gdcmzlib.dll
 C:\Users\Tan\source\repos\API_Training3\API_Training3\bin\Debug\netcoreapp3.1\socketxx.dll
-C:\Users\Tan\source\repos\API_Training3\API_Training3\obj\Debug\netcoreapp3.1\API_Training3.csproj.CoreCompileInputs.cache
-C:\Users\Tan\source\repos\API_Training3\API_Training3\obj\Debug\netcoreapp3.1\API_Training3.MvcApplicationPartsAssemblyInfo.cs
-C:\Users\Tan\source\repos\API_Training3\API_Training3\obj\Debug\netcoreapp3.1\API_Training3.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\Tan\source\repos\API_Training3\API_Training3\bin\Debug\netcoreapp3.1\csharls.dll
 C:\Users\Tan\source\repos\API_Training3\API_Training3\bin\Debug\netcoreapp3.1\CSJ2K.dll
 C:\Users\Tan\source\repos\API_Training3\API_Training3\bin\Debug\netcoreapp3.1\Dicom.Core.dll
 C:\Users\Tan\source\repos\API_Training3\API_Training3\bin\Debug\netcoreapp3.1\BitMiracle.LibJpeg.NetCore.dll
+C:\Users\Tan\source\repos\API_Training3\API_Training3\obj\Debug\netcoreapp3.1\API_Training3.csproj.CoreCompileInputs.cache
+C:\Users\Tan\source\repos\API_Training3\API_Training3\obj\Debug\netcoreapp3.1\API_Training3.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\Tan\source\repos\API_Training3\API_Training3\obj\Debug\netcoreapp3.1\API_Training3.MvcApplicationPartsAssemblyInfo.cache

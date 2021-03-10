@@ -145,5 +145,13 @@ namespace API_Training3.Modules.Accounts.Controllers
             List<string> result = await _accountService.ConvertDICOMtoPng5(files);
             return result;
         }
+
+        [HttpPost("Detect")]
+
+        public async Task<List<string>> Detect([FromForm] List<IFormFile> files)
+        {
+            List<string> result = await _accountService.DetectPng(files);
+            return result;
+        }
     }
 }
