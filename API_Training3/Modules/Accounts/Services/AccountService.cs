@@ -47,7 +47,7 @@ namespace API_Training3.Modules.Accounts.Services
         Task<List<string>> ConvertDICOMtoPng3(List<IFormFile> files);
         Task<List<string>> ConvertDICOMtoPng4(List<IFormFile> files);
         Task<List<string>> ConvertDICOMtoPng5(List<IFormFile> files);
-        Task<List<string>> DetectPng(List<IFormFile> files);
+        Task<(DetectResult response, string message)> DetectPng(IFormFile file);
 
 
     }
@@ -509,28 +509,32 @@ namespace API_Training3.Modules.Accounts.Services
             return filePaths;
         }
 
-        public async Task<List<string>> DetectPng(List<IFormFile> files)
+        public async Task<(DetectResult response, string message)> DetectPng(IFormFile file)
         {
-            List<string> data = new List<string>();
-            foreach (var formFile in files)
-            {
-                if (Path.GetExtension(formFile.FileName).Equals(".dicom"))
+            DetectResult result = null;
+                if (Path.GetExtension(file.FileName).Equals(".png"))
                 {
                     var httpClient = new HttpClient();
                     MultipartFormDataContent form = new MultipartFormDataContent();
-                    var stream = formFile.OpenReadStream();
-                    HttpContent content;
-                    MemoryStream ms = new MemoryStream();
-                    await formFile.CopyToAsync(ms);
-                    content = new ByteArrayContent(ms.ToArray());
-                    form.Add(content, "files", formFile.Name);
+                    var stream = file.OpenReadStream();
+                    byte[] dataFile;
+                    using (var br = new BinaryReader(file.OpenReadStream()))
+                    {
+                        dataFile = br.ReadBytes((int)file.OpenReadStream().Length);
+                    }
+                    ByteArrayContent bytes = new ByteArrayContent(dataFile);
+
+                    MultipartFormDataContent multiContent = new MultipartFormDataContent();
+
+                    multiContent.Add(bytes, "file", file.FileName);
                     /*var response = await httpClient.PostAsync("https://forge-cp-app.herokuapp.com/swagger/index.html?fbclid=IwAR2MN_ACiDwnuZymPzL9uS_2SLVKaPzFumTweVMqygEBIHOYQQB0ZPklCJQ/api/Account/ConvertToPng", content);*/
                     try
                     {
-                        using (var httpResponseMessage = await httpClient.PostAsync("https://forge-cp-app.herokuapp.com/api/Account/ConvertToPng", content))
+                        using (var httpResponseMessage = await httpClient.PostAsync("http://192.168.43.45:5000/detect", multiContent))
                         {
                             string jsonData = httpResponseMessage.Content.ReadAsStringAsync().Result;
-                            data = JsonSerializer.Deserialize<List<string>>(jsonData);
+                            
+                            result = JsonSerializer.Deserialize<DetectResult>(jsonData);
                         }
                     }
                     catch (Exception e)
@@ -538,14 +542,12 @@ namespace API_Training3.Modules.Accounts.Services
 
                         Console.WriteLine(e.Message);
                     }
-                    
-/*                    string jsonData = response.Content.ReadAsStringAsync().Result;
-                        data = JsonSerializer.Deserialize<List<string>>(jsonData);*/
-                    
                 }
-            }
-
-                    return data;
+                else
+                {
+                    return (null, "Image is not Png");
+                }
+            return (result, "Success");
         }
     }
 }

@@ -2,7 +2,6 @@ C:\Users\Tan\source\repos\API_Training3\API_Training3\bin\Debug\netcoreapp3.1\ap
 C:\Users\Tan\source\repos\API_Training3\API_Training3\bin\Debug\netcoreapp3.1\appsettings.json
 C:\Users\Tan\source\repos\API_Training3\API_Training3\bin\Debug\netcoreapp3.1\Properties\launchSettings.json
 C:\Users\Tan\source\repos\API_Training3\API_Training3\bin\Debug\netcoreapp3.1\API_Training3.exe
-C:\Users\Tan\source\repos\API_Training3\API_Training3\obj\Debug\netcoreapp3.1\API_Training3.csprojAssemblyReference.cache
 C:\Users\Tan\source\repos\API_Training3\API_Training3\obj\Debug\netcoreapp3.1\API_Training3.AssemblyInfoInputs.cache
 C:\Users\Tan\source\repos\API_Training3\API_Training3\obj\Debug\netcoreapp3.1\API_Training3.AssemblyInfo.cs
 C:\Users\Tan\source\repos\API_Training3\API_Training3\obj\Debug\netcoreapp3.1\API_Training3.RazorTargetAssemblyInfo.cache
@@ -110,3 +109,4 @@ C:\Users\Tan\source\repos\API_Training3\API_Training3\bin\Debug\netcoreapp3.1\Bi
 C:\Users\Tan\source\repos\API_Training3\API_Training3\obj\Debug\netcoreapp3.1\API_Training3.csproj.CoreCompileInputs.cache
 C:\Users\Tan\source\repos\API_Training3\API_Training3\obj\Debug\netcoreapp3.1\API_Training3.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\Tan\source\repos\API_Training3\API_Training3\obj\Debug\netcoreapp3.1\API_Training3.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\Tan\source\repos\API_Training3\API_Training3\obj\Debug\netcoreapp3.1\API_Training3.csprojAssemblyReference.cache

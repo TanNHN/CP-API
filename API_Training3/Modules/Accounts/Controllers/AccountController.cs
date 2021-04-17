@@ -148,10 +148,10 @@ namespace API_Training3.Modules.Accounts.Controllers
 
         [HttpPost("Detect")]
 
-        public async Task<List<string>> Detect([FromForm] List<IFormFile> files)
+        public async Task<IActionResult> Detect([FromForm] IFormFile file)
         {
-            List<string> result = await _accountService.DetectPng(files);
-            return result;
+            (Object response, string message) = await _accountService.DetectPng(file);
+            return ResponseOk(response, message);
         }
     }
 }
